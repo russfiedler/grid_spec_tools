@@ -354,10 +354,10 @@ subroutine create_grid_spec_file(grid)
 end subroutine create_grid_spec_file
 
 subroutine handle_error(error_flag,isfatal,err_string)
-!RASF #ifdef __INTEL_COMPILER
-!RASF !  Needs special traceback module for intel compile RASF
-!RASF    use ifcore
-!RASF #endif
+#ifdef __INTEL_COMPILER
+!  Needs special traceback module for intel compile RASF
+   use ifcore
+#endif
 ! Simple error handle for netCDF
 integer(kind=int32),intent(in) :: error_flag
 logical, intent(in),optional :: isfatal
@@ -369,10 +369,10 @@ if ( error_flag  /= nf90_noerr ) then
    if ( fatal ) then
       write(*,*) 'FATAL ERROR:',nf90_strerror(error_flag)
       if (present(err_string)) write(*,*) trim(err_string)
-!RASF #ifdef __INTEL_COMPILER
-!RASF         ! Get traceback and return quietly for correct abort
-!RASF         call TRACEBACKQQ(user_exit_code=-1)
-!RASF #endif
+#ifdef __INTEL_COMPILER
+        ! Get traceback and return quietly for correct abort
+        call TRACEBACKQQ(user_exit_code=-1)
+#endif
       stop
    endif
 endif
