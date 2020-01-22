@@ -137,6 +137,12 @@ character(len=256)  :: dirfile=''        ! concatenation
 
 logical             :: fexist = .false.
 
+real(real64) :: tol=0.0
+
+! read a tolerance 
+write(*,*) 'Enter tolerance'
+read(*,*) tol
+
 ! Get info on the grid from input
 
 write(*,*) 'Getting model grid info'
@@ -274,7 +280,7 @@ do j=1,ny
       if(grid%depth_t(i,j) <= -1.0e6_real64)  grid%depth_t(i,j)=0.0
       if(grid%depth_t(i,j) <= 0.0_real64) cycle
       do k=1,nz
-         if(grid%depth_t(i,j) <= grid%zb(k)) then
+         if(grid%depth_t(i,j) <= grid%zb(k)+tol) then
             grid%num_levels(i,j)=k
             exit
          endif
